@@ -1,0 +1,504 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| adventureeworks    |
+| adventureworks     |
+| adventureworks1    |
+| day1               |
+| db2                |
+| dbms1              |
+| exam               |
+| mydb               |
+| mysql              |
+| performance_schema |
+| sales              |
+| techworks          |
+| tempo              |
+| test               |
+| tg                 |
+| tg1                |
+| tg2                |
+| vita_db            |
++--------------------+
+19 rows in set (0.04 sec)
+
+mysql> use techworks;
+Database changed
+mysql> show tables
+    -> ;
++---------------------+
+| Tables_in_techworks |
++---------------------+
+| a                   |
+| b                   |
+| bookstore           |
+| customers           |
+| employee            |
+| product             |
+| salespeople         |
++---------------------+
+7 rows in set (0.00 sec)
+
+mysql> create table orders
+    -> (
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> describe customers;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| CNUM   | int(11)     | NO   | PRI | NULL    |       |
+| CNAME  | varchar(20) | YES  |     | NULL    |       |
+| CITY   | varchar(20) | YES  |     | NULL    |       |
+| RATING | int(11)     | YES  |     | NULL    |       |
+| SNUM   | int(11)     | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+5 rows in set (0.04 sec)
+
+mysql> create table orders
+    -> (
+    -> ONUM int primary,
+    -> AMT decimal(6,2),
+    -> ODATE date '%d%m%y';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+AMT decimal(6,2),
+ODATE date '%d%m%y'' at line 3
+mysql> create table orders
+    -> (
+    -> ONUM int primary,
+    -> AMT decimal(6,2),
+    -> ODATE date '%d%m%y');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+AMT decimal(6,2),
+ODATE date '%d%m%y')' at line 3
+mysql> describe salespeople;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| SNUM  | int(11)      | NO   | PRI | NULL    |       |
+| SNAME | varchar(20)  | YES  |     | NULL    |       |
+| CITY  | varchar(20)  | YES  |     | NULL    |       |
+| COMM  | decimal(8,2) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+4 rows in set (0.04 sec)
+
+mysql> create table orders
+    -> (
+    -> ONUM int primary,
+    -> AMT decimal(6,2),
+    -> DATE_FORMAT(date,'%d/%m/%Y'));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+AMT decimal(6,2),
+DATE_FORMAT(date,'%d/%m/%Y'))' at line 3
+mysql> create table orders
+    -> (
+    -> DATE_FORMAT(date,'%d/%m/%Y'));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(date,'%d/%m/%Y'))' at line 3
+mysql> alter table salespeople
+    -> add column dateoftable date;
+Query OK, 6 rows affected (0.30 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> insert into salespeople dateoftable(date,'%d/%m/%Y') values(10/03/2019);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dateoftable(date,'%d/%m/%Y') values(10/03/2019)' at line 1
+mysql> insert into salespeople values(dateoftable) values now();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'values now()' at line 1
+mysql> insert into salespeople (dateoftable) values now();
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'now()' at line 1
+mysql> alter table salespeople
+    -> drop column dateoftable;
+Query OK, 6 rows affected (0.18 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> create table Orders
+    -> (
+    -> ONUM int primary key,
+    -> AMT decimal(8,2),
+    -> ODATE date,
+    -> CNUM int,
+    -> SNUM int
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe Orders;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| ONUM  | int(11)      | NO   | PRI | NULL    |       |
+| AMT   | decimal(8,2) | YES  |     | NULL    |       |
+| ODATE | date         | YES  |     | NULL    |       |
+| CNUM  | int(11)      | YES  |     | NULL    |       |
+| SNUM  | int(11)      | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> insert into Orders values
+    -> (3001,18.6,1996-03-10,2008,1007),
+    -> (3003,767.19,1996-03-10);
+ERROR 1136 (21S01): Column count doesn't match value count at row 2
+mysql> insert into Orders values
+    -> (3001,18.6,1996-03-10,2008,1007),
+    -> (3003,767.19,1996-03-10,2001,1001);
+ERROR 1292 (22007): Incorrect date value: '1983' for column 'ODATE' at row 1
+mysql> insert into Orders values
+    -> (3001,18.6,1996-03-10,2008,1007);
+ERROR 1292 (22007): Incorrect date value: '1983' for column 'ODATE' at row 1
+mysql> insert into Orders values
+    -> (3003,767.19,1996/03/10,2001,1001);
+ERROR 1292 (22007): Incorrect date value: '67' for column 'ODATE' at row 1
+mysql> insert into Orders values
+    -> (3001,18.6,'1996-03-10',2008,1007);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into Orders values
+    -> (3001,18.6,1996-03-10,2008,1007);;
+ERROR 1292 (22007): Incorrect date value: '1983' for column 'ODATE' at row 1
+ERROR:
+No query specified
+
+mysql> select * from Orders;
++------+-------+------------+------+------+
+| ONUM | AMT   | ODATE      | CNUM | SNUM |
++------+-------+------------+------+------+
+| 3001 | 18.60 | 1996-03-10 | 2008 | 1007 |
++------+-------+------------+------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into Orders values
+    -> (3003,767.19,'1996/03/10',2001,1001);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from Orders;
++------+--------+------------+------+------+
+| ONUM | AMT    | ODATE      | CNUM | SNUM |
++------+--------+------------+------+------+
+| 3001 |  18.60 | 1996-03-10 | 2008 | 1007 |
+| 3003 | 767.19 | 1996-03-10 | 2001 | 1001 |
++------+--------+------------+------+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into Orders values
+    -> (3002,1900.10,'1996-03-10',2007,1004),
+    -> (3005,5160.45,'1996-03-10',2003,1002),
+    -> (3006,1098.16,'1996-03-10',2008,1007),
+    -> (3009,1713.23,'1996-04-10',2002,1003),
+    -> (3007,75.75,'1996-04-10',2002,1003),
+    -> (3008,4723.00,'1996-05-10',2006,1001),
+    -> (3010,1309.95,'1996-06-10',2004,1002),
+    -> (3011,9891.88,'1996-06-10',2006,1001);
+Query OK, 8 rows affected (0.03 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> select * from Orders;
++------+---------+------------+------+------+
+| ONUM | AMT     | ODATE      | CNUM | SNUM |
++------+---------+------------+------+------+
+| 3001 |   18.60 | 1996-03-10 | 2008 | 1007 |
+| 3002 | 1900.10 | 1996-03-10 | 2007 | 1004 |
+| 3003 |  767.19 | 1996-03-10 | 2001 | 1001 |
+| 3005 | 5160.45 | 1996-03-10 | 2003 | 1002 |
+| 3006 | 1098.16 | 1996-03-10 | 2008 | 1007 |
+| 3007 |   75.75 | 1996-04-10 | 2002 | 1003 |
+| 3008 | 4723.00 | 1996-05-10 | 2006 | 1001 |
+| 3009 | 1713.23 | 1996-04-10 | 2002 | 1003 |
+| 3010 | 1309.95 | 1996-06-10 | 2004 | 1002 |
+| 3011 | 9891.88 | 1996-06-10 | 2006 | 1001 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+mysql>Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use techworks;
+Database changed
+mysql> describe salespeople;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| SNUM  | int(11)      | NO   | PRI | NULL    |       |
+| SNAME | varchar(20)  | YES  |     | NULL    |       |
+| CITY  | varchar(20)  | YES  |     | NULL    |       |
+| COMM  | decimal(8,2) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select CNAME FROM CUSTOMERS
+    -> WHERE RATING=100;
++---------+
+| CNAME   |
++---------+
+| Hoffman |
+| Clemens |
+| Pereira |
++---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT CNAME FROM CUSTOMERS
+    -> WHERE CITY IS NULL;
+Empty set (0.00 sec)
+
+mysql> ALTER TABLE Customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM) references Salespeople;
+ERROR 1005 (HY000): Can't create table 'techworks.#sql-112c_2' (errno: 150)
+mysql> ALTER TABLE Customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> show tables
+    -> ;
++---------------------+
+| Tables_in_techworks |
++---------------------+
+| a                   |
+| b                   |
+| bookstore           |
+| customers           |
+| employee            |
+| orders              |
+| product             |
+| salespeople         |
++---------------------+
+8 rows in set (0.00 sec)
+
+mysql> ALTER TABLE customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM) references Salespeople;
+ERROR 1005 (HY000): Can't create table 'techworks.#sql-112c_2' (errno: 150)
+mysql> ALTER TABLE customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM) references salespeople(SNUM);
+Query OK, 7 rows affected (0.22 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Orders
+    -> add constraint order_fk
+    -> foreign key(SNUM) references salespeople(SNUM);
+Query OK, 10 rows affected (0.18 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Orders
+    -> add constraint order_fk2
+    -> foreign key(CNUM) references customers(CNUM);
+Query OK, 10 rows affected (0.13 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql>Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use techworks;
+Database changed
+mysql> describe salespeople;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| SNUM  | int(11)      | NO   | PRI | NULL    |       |
+| SNAME | varchar(20)  | YES  |     | NULL    |       |
+| CITY  | varchar(20)  | YES  |     | NULL    |       |
+| COMM  | decimal(8,2) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select CNAME FROM CUSTOMERS
+    -> WHERE RATING=100;
++---------+
+| CNAME   |
++---------+
+| Hoffman |
+| Clemens |
+| Pereira |
++---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT CNAME FROM CUSTOMERS
+    -> WHERE CITY IS NULL;
+Empty set (0.00 sec)
+
+mysql> ALTER TABLE Customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM) references Salespeople;
+ERROR 1005 (HY000): Can't create table 'techworks.#sql-112c_2' (errno: 150)
+mysql> ALTER TABLE Customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> show tables
+    -> ;
++---------------------+
+| Tables_in_techworks |
++---------------------+
+| a                   |
+| b                   |
+| bookstore           |
+| customers           |
+| employee            |
+| orders              |
+| product             |
+| salespeople         |
++---------------------+
+8 rows in set (0.00 sec)
+
+mysql> ALTER TABLE customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM) references Salespeople;
+ERROR 1005 (HY000): Can't create table 'techworks.#sql-112c_2' (errno: 150)
+mysql> ALTER TABLE customers
+    -> add constraint cust_fk
+    -> foreign key(SNUM) references salespeople(SNUM);
+Query OK, 7 rows affected (0.22 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Orders
+    -> add constraint order_fk
+    -> foreign key(SNUM) references salespeople(SNUM);
+Query OK, 10 rows affected (0.18 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Orders
+    -> add constraint order_fk2
+    -> foreign key(CNUM) references customers(CNUM);
+Query OK, 10 rows affected (0.13 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select s. SNUM,s.SNAME ,o.AMT,o.ODATE from salesperson s inner join orders o
+    -> where s.SNUM;
+ERROR 1146 (42S02): Table 'techworks.salesperson' doesn't exist
+mysql> select s.SNUM,s.SNAME ,o.AMT,o.ODATE from salesperson s inner join orders o
+    -> ;
+ERROR 1146 (42S02): Table 'techworks.salesperson' doesn't exist
+mysql> select s.SNUM,s.SNAME, max(o.AMT),o.ODATE from salesperson s inner join orders o where o.SNUM=S.SNUM
+    -> group by ODATE;
+ERROR 1146 (42S02): Table 'techworks.salesperson' doesn't exist
+mysql> select s.SNUM,s.SNAME, max(o.AMT),o.ODATE from salespeople s inner join orders o where o.SNUM=S.SNUM
+    -> group by ODATE;
++------+---------+------------+------------+
+| SNUM | SNAME   | max(o.AMT) | ODATE      |
++------+---------+------------+------------+
+| 1001 | Peel    |    5160.45 | 1996-03-10 |
+| 1003 | AxelRod |    1713.23 | 1996-04-10 |
+| 1001 | Peel    |    4723.00 | 1996-05-10 |
+| 1001 | Peel    |    9891.88 | 1996-06-10 |
++------+---------+------------+------------+
+4 rows in set (0.04 sec)
+
+mysql> select s.SNUM,s.SNAME, max(o.AMT),o.ODATE from salesperson s inner join orders o where o.SNUM=S.SNUM
+    -> ;
+ERROR 1146 (42S02): Table 'techworks.salesperson' doesn't exist
+mysql> select s.SNUM,s.SNAME, max(o.AMT),o.ODATE from salespeople s inner join orders o where o.SNUM=S.SNUM
+    -> group by ODATE,o.SNUM;
++------+---------+------------+------------+
+| SNUM | SNAME   | max(o.AMT) | ODATE      |
++------+---------+------------+------------+
+| 1001 | Peel    |     767.19 | 1996-03-10 |
+| 1002 | Serres  |    5160.45 | 1996-03-10 |
+| 1004 | Motika  |    1900.10 | 1996-03-10 |
+| 1007 | Rifkin  |    1098.16 | 1996-03-10 |
+| 1003 | AxelRod |    1713.23 | 1996-04-10 |
+| 1001 | Peel    |    4723.00 | 1996-05-10 |
+| 1001 | Peel    |    9891.88 | 1996-06-10 |
+| 1002 | Serres  |    1309.95 | 1996-06-10 |
++------+---------+------------+------------+
+8 rows in set (0.00 sec)
+
+mysql>
+mysql> select o.CNUM,c.CNAME
+    -> from customers c inner join orders s
+    -> where o.CNUM=c.CNAME
+    -> order by o.CNUM desc;
+ERROR 1054 (42S22): Unknown column 'o.CNUM' in 'field list'
+mysql> select o.CNUM,c.CNAME
+    -> from customers c inner join orders o
+    -> where o.CNUM=c.CNAME
+    -> order by o.CNUM desc;
+Empty set (0.00 sec)
+
+mysql> select o.CNUM,c.CNAME,c.CNUM
+    -> from customers c inner join orders o
+    -> where o.CNUM=c.CNAME
+    -> ;
+Empty set (0.00 sec)
+
+mysql> select o.CNUM,c.CNAME,c.CNUM
+    -> from customers c inner join orders o
+    -> where o.CNUM=c.CNUM
+    -> order by o.CNUM desc;
++------+----------+------+
+| CNUM | CNAME    | CNUM |
++------+----------+------+
+| 2008 | Cisneros | 2008 |
+| 2008 | Cisneros | 2008 |
+| 2007 | Pereira  | 2007 |
+| 2006 | Clemens  | 2006 |
+| 2006 | Clemens  | 2006 |
+| 2004 | Grass    | 2004 |
+| 2003 | Liu      | 2003 |
+| 2002 | Giovanni | 2002 |
+| 2002 | Giovanni | 2002 |
+| 2001 | Hoffman  | 2001 |
++------+----------+------+
+10 rows in set (0.00 sec)
+
+mysql> select o.CNUM,c.CNAME
+    -> from customers c inner join orders s
+    -> where o.CNUM=c.CNUM
+    -> order by o.CNUM desc;
+ERROR 1054 (42S22): Unknown column 'o.CNUM' in 'field list'
+mysql> select o.CNUM,c.CNAME
+    -> from customers c inner join orders o
+    -> where o.CNUM=c.CNUM
+    -> order by o.CNUM desc;
++------+----------+
+| CNUM | CNAME    |
++------+----------+
+| 2008 | Cisneros |
+| 2008 | Cisneros |
+| 2007 | Pereira  |
+| 2006 | Clemens  |
+| 2006 | Clemens  |
+| 2004 | Grass    |
+| 2003 | Liu      |
+| 2002 | Giovanni |
+| 2002 | Giovanni |
+| 2001 | Hoffman  |
++------+----------+
+10 rows in set (0.00 sec)
+
+mysql> select s.SNUM,o.ONUM
+    -> ;
+ERROR 1109 (42S02): Unknown table 's' in field list
+mysql>
