@@ -1,0 +1,219 @@
+1) create a multi-threaded application by using  "extends Thread " method.create 2 threads. they should display characters from A to J.
+
+package multithreading;
+
+public class program1 extends Thread
+{
+    synchronized public void run()
+	{
+		for(char i='A';i<'K';i++)
+		{
+			System.out.println(i);
+		}
+	}
+
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+		program1 p=new program1();
+		Thread t1 = new Thread(p);
+		Thread t2 = new Thread(p);
+		t1.start();
+		t2.start();
+
+	}
+
+}
+
+---------------------------------------------------------------
+
+2) above program  using "implements Runnable" method.
+
+package multithreading;
+
+public class program2 implements Runnable {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		program2 p2=new program2();
+		Thread t1=new Thread(p2);
+		Thread t2=new Thread(p2);
+		t1.start();
+		t2.start();
+		
+
+	}
+
+	@Override
+	synchronized public void run() {
+		// TODO Auto-generated method stub
+		for(char i='A';i<'K';i++)
+		{
+			System.out.println(i);
+		}
+		
+	}
+
+}
+---------------------------------------------------------------
+
+3) create 3 threads in such a way that while one thread is executing, 2 threads cannot interfere. they should display output "Exec  0" to "Exec 5".
+
+package multithreading;
+
+public class program3 implements Runnable{
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+program3 p= new program3();
+Thread t1=new Thread(p);
+Thread t2=new Thread(p);
+Thread t3=new Thread(p);
+t1.start();
+t2.start();
+t3.start();
+	}
+
+	@Override
+synchronized public void run()
+	{
+		for(int i=0;i<6;i++)
+		{
+			
+			System.out.println("Exec" + i + Thread.currentThread());
+		}
+	
+		
+	}
+
+}
+
+---------------------------------------------------------------
+4)create 2 threads. Write a program which displays number 1 to 10 using class lock. 
+[hint:- use "implements Runnable" and synchronized block]
+
+package multithreading;
+
+public class program4 implements Runnable {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		program4 p = new program4();
+		program4 p1 = new program4();
+		Thread t1 = new Thread(p);
+		Thread t2 = new Thread(p1);
+		t1.setName("FIRST_THREAD");
+		t2.setName("SECOND_THREAD");
+		t1.start();
+		t2.start();
+
+	}
+
+	@Override
+	public void run() {
+		disp();
+	}
+
+	// TODO Auto-generated method stub
+	synchronized static void disp() {
+
+		for (int i = 1; i <= 10; i++) {
+			System.out.println(i + "" + Thread.currentThread());
+		}
+
+	}
+
+}
+   
+                  OR
+
+package multithreading;
+
+public class program4 implements Runnable {
+
+	public static void main(String[] args) throws Exception {
+
+		program4 p = new program4();
+		program4 p1 = new program4();
+		Thread t1 = new Thread(p);
+		Thread t2 = new Thread(p1);
+		t1.setName("FIRST_THREAD");
+		t2.setName("SECOND_THREAD");
+		t1.start();
+		t2.start();
+
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		synchronized (program4.class) {
+			for (int i = 1; i < 11; i++) {
+				System.out.println(i);
+
+			}
+		}
+	}
+
+	// TODO Auto-generated method stub
+
+}
+
+---------------------------------------------------------------
+
+5) create 2 threads
+	one thread will display 1 to 50
+	second thread will display 50 to 1
+both the threads should start simultaneously.
+
+(use implements method)
+
+
+package multithreading;
+
+public class program5 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+        First f= new First();
+        Second s = new Second();
+        Thread t1= new Thread(f);
+        Thread t2= new Thread(s);
+        t1.setName("First");
+        t2.setName("Second");
+        t1.start();
+        t2.start();
+        
+	}
+
+}
+package multithreading;
+
+public class First implements Runnable{
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		for(int i=50;i>0;i--)
+		{
+			System.out.println(i + "" + Thread.currentThread());
+		}
+		
+	}
+
+}
+
+package multithreading;
+
+public class Second implements Runnable{
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		for(int i=1;i<51;i++)
+		{
+			System.out.println(i + "" + Thread.currentThread());
+		}
+	}
+
+}
